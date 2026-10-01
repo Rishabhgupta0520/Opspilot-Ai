@@ -1,0 +1,205 @@
+{
+  "info": {
+    "name": "OpsPilot AI API Collection",
+    "description": "Complete REST API endpoints for OpsPilot AI - Autonomous Agentic Operations Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5001/api", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "workflowId", "value": "", "type": "string" },
+    { "key": "approvalId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "System Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+      }
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login as Manager",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"manager@opspilot.ai\",\n  \"password\": \"Manager@123456\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login as Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@opspilot.ai\",\n  \"password\": \"Admin@123456\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workflows",
+      "item": [
+        {
+          "name": "Create Autonomous Goal Workflow",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"goal\": \"Resolve all delayed orders from today. Prioritize VIP customers. Automatically process refunds under ₹5,000. Refunds above ₹5,000 require manager approval. Verify every action and retry recoverable failures.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/workflows", "host": ["{{baseUrl}}"], "path": ["workflows"] }
+          }
+        },
+        {
+          "name": "List Workflows",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/workflows", "host": ["{{baseUrl}}"], "path": ["workflows"] }
+          }
+        },
+        {
+          "name": "Get Workflow By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/workflows/{{workflowId}}", "host": ["{{baseUrl}}"], "path": ["workflows", "{{workflowId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Approvals (HITL)",
+      "item": [
+        {
+          "name": "List Approvals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/approvals", "host": ["{{baseUrl}}"], "path": ["approvals"] }
+          }
+        },
+        {
+          "name": "Approve High-Risk Action",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Approved high-value delayed shipment refund after reviewing delay evidence.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/approvals/{{approvalId}}/approve", "host": ["{{baseUrl}}"], "path": ["approvals", "{{approvalId}}", "approve"] }
+          }
+        },
+        {
+          "name": "Reject High-Risk Action",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Rejected by manager due to missing customer proof of damage.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/approvals/{{approvalId}}/reject", "host": ["{{baseUrl}}"], "path": ["approvals", "{{approvalId}}", "reject"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Operations Entities",
+      "item": [
+        {
+          "name": "Get Delayed Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/orders?status=delayed", "host": ["{{baseUrl}}"], "path": ["orders"], "query": [{ "key": "status", "value": "delayed" }] }
+          }
+        },
+        {
+          "name": "Get Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/customers", "host": ["{{baseUrl}}"], "path": ["customers"] }
+          }
+        },
+        {
+          "name": "Get Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/inventory", "host": ["{{baseUrl}}"], "path": ["inventory"] }
+          }
+        },
+        {
+          "name": "Get Active Policies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/policies", "host": ["{{baseUrl}}"], "path": ["policies"] }
+          }
+        },
+        {
+          "name": "Get Agent Activity Log",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/agents/activity", "host": ["{{baseUrl}}"], "path": ["agents", "activity"] }
+          }
+        },
+        {
+          "name": "Get Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/analytics", "host": ["{{baseUrl}}"], "path": ["analytics"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Demo Management",
+      "item": [
+        {
+          "name": "Reset Demo Dataset",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/demo/reset", "host": ["{{baseUrl}}"], "path": ["demo", "reset"] }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "opspilot-ai-root",
+  "version": "1.0.0",
+  "description": "OpsPilot AI: From Business Goal to Verified Action",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "seed": "npm --prefix backend run seed",
+    "test:backend": "npm --prefix backend test",
+    "build:frontend": "npm --prefix frontend run build",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev"
+  },
+  "keywords": [
+    "agentic-ai",
+    "operations",
+    "orchestrator",
+    "gemini",
+    "automation"
+  ],
+  "author": "OpsPilot Team",
+  "license": "MIT"
+}
