@@ -1042,31 +1042,39 @@ class MockDataService {
 
     // ASSISTANT CHATBOT
     if (path === '/assistant' && method === 'post') {
-      const query = (body.query || '').toLowerCase();
+      const query = (body.message || body.query || '').toLowerCase();
       let responseText = '';
+      let suggestedGoal = 'Resolve all delayed orders from today. Prioritize VIP customers. Automatically process refunds under ₹5,000. Refunds above ₹5,000 require manager approval.';
+      let suggestedLink = '/dashboard';
       let suggestedActions = [];
 
       if (query.includes('delayed') || query.includes('order')) {
         const delayed = this.orders.filter(o => o.status === 'delayed');
         responseText = `There are currently **${delayed.length} delayed orders** in the system. High priority: **ORD-1042** (Amit Sharma, VIP, delayed 72h, ₹15,000) and **ORD-1088** (Rajesh Verma, Enterprise, delayed 96h, ₹48,000).`;
+        suggestedGoal = 'Investigate and resolve delayed VIP order ORD-1042 for Amit Sharma.';
+        suggestedLink = '/orders';
         suggestedActions = [
-          { label: 'Resolve VIP ORD-1042', goal: 'Investigate and resolve delayed VIP order ORD-1042 for Amit Sharma' },
+          { label: 'Resolve VIP ORD-1042', goal: suggestedGoal },
           { label: 'View Delayed Orders', goal: 'Show all delayed orders exceeding 24 hours SLA' }
         ];
-      } else if (query.includes('approval') || query.includes('policy')) {
+      } else if (query.includes('approval') || query.includes('policy') || query.includes('threshold') || query.includes('5k')) {
         const pending = this.approvals.filter(a => a.status === 'pending');
         responseText = `You have **${pending.length} pending human approvals**. Under policy **POL-REF-002**, any refund or replacement over **₹5,000** mandates operations manager review to protect business funds.`;
+        suggestedGoal = 'Inspect and approve high-value refund for delayed order ORD-1042.';
+        suggestedLink = '/approvals';
         suggestedActions = [
           { label: 'Review Approvals', goal: 'Navigate to Approval Center to verify evidence cards' }
         ];
       } else if (query.includes('inventory') || query.includes('stock')) {
         const low = this.inventory.filter(i => i.status === 'low_stock' || i.status === 'critical');
         responseText = `Inventory alert: **${low.length} SKUs** are below safety buffer threshold. Critical item: **UltraView 34" Curved Monitor** (Only 3 units left in Delhi Hub).`;
+        suggestedGoal = 'Auto-reorder critical low stock inventory SKUs from supplier.';
+        suggestedLink = '/inventory';
         suggestedActions = [
-          { label: 'Trigger Reorder', goal: 'Auto-reorder critical low stock inventory SKUs from supplier' }
+          { label: 'Trigger Reorder', goal: suggestedGoal }
         ];
       } else {
-        responseText = `I am your **OpsPilot AI Copilot**. I supervise autonomous agent workflows, policy governance, read-after-write verification, and Human-in-the-Loop approvals.\n\nYou can ask me about delayed orders, policy rules, pending manager approvals, or launch an automated operational goal directly.`;
+        responseText = `Hello! I am your **OpsPilot AI Copilot**. I supervise autonomous multi-agent workflows, enforce deterministic policy governance, and manage Human-in-the-Loop approvals.\n\nYou can ask me about delayed shipments, policy rules, pending approvals, or click below to launch an autonomous operations goal directly.`;
         suggestedActions = [
           { label: 'Resolve VIP Shipment', goal: 'Investigate and resolve delayed VIP order ORD-1042 for Amit Sharma' },
           { label: 'Run Courier SLA Audit', goal: 'Audit operational SLA violations from today and retry recoverable courier notifications' }
@@ -1076,8 +1084,17 @@ class MockDataService {
       return {
         success: true,
         data: {
+          reply: responseText,
           response: responseText,
+          suggestedGoal,
+          suggestedLink,
           suggestedActions,
+          telemetry: {
+            delayedOrders: this.orders.filter(o => o.status === 'delayed').length,
+            activeWorkflows: this.workflows.length,
+            pendingApprovals: this.approvals.filter(a => a.status === 'pending').length,
+            riskInventory: this.inventory.filter(i => i.status === 'low_stock' || i.status === 'critical').length
+          },
           timestamp: new Date().toISOString()
         }
       };
