@@ -177,23 +177,34 @@ export default function DashboardLayout() {
           <div className="pt-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 min-w-0">
               <div className="h-8 w-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-semibold text-slate-300">
-                {user?.username ? user.username.slice(0, 2).toUpperCase() : 'OP'}
+                {user?.username ? user.username.slice(0, 2).toUpperCase() : 'GU'}
               </div>
               <div className="truncate">
-                <p className="text-xs font-medium text-slate-200 truncate">{user?.username || 'Operator'}</p>
-                <span className={`inline-block text-[9px] uppercase px-1.5 py-0.2 rounded border font-mono font-bold ${getRoleBadge(user?.role)}`}>
-                  {user?.role || 'operator'}
+                <p className="text-xs font-medium text-slate-200 truncate">{user?.username || 'Guest Operator'}</p>
+                <span className={`inline-block text-[9px] uppercase px-1.5 py-0.2 rounded border font-mono font-bold ${getRoleBadge(user?.role || 'viewer')}`}>
+                  {user?.role || 'demo'}
                 </span>
               </div>
             </div>
-            <button
-              onClick={() => { logout(); navigate('/login'); }}
-              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded transition-colors"
-              title="Sign Out"
-            >
-              <LogOut className="h-4 w-4" />
-            </button>
+            {user ? (
+              <button
+                onClick={() => { logout(); navigate('/'); }}
+                className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded transition-colors"
+                title="Sign Out"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="px-2 py-1 text-[10px] font-mono text-brand-cyan border border-brand-cyan/30 rounded hover:bg-brand-cyan/10 transition-colors"
+                title="Sign In"
+              >
+                Sign In
+              </button>
+            )}
           </div>
+
         </div>
       </aside>
 

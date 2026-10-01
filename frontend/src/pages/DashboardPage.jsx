@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../services/api';
+import PageWrapper from '../components/PageWrapper';
 import {
   Sparkles,
   Send,
@@ -141,7 +142,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto font-sans">
+    <PageWrapper className="space-y-6 max-w-7xl mx-auto font-sans">
       {/* Top Banner / Heading */}
       <motion.div
         initial={{ opacity: 0, y: -5 }}
@@ -242,50 +243,46 @@ export default function DashboardPage() {
 
       {/* KPI METRICS OVERVIEW */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <motion.div whileHover={{ y: -3 }} className="p-4 rounded-xl glass-panel">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span>Total Workflows</span>
-            <Zap className="h-4 w-4 text-brand-cyan" />
-          </div>
-          <p className="text-2xl font-extrabold text-white font-mono">{metrics.totalWorkflows || 1}</p>
-          <span className="text-[11px] text-emerald-400 font-mono">100% trace coverage</span>
-        </motion.div>
+        {[
+          { label: 'Total Workflows', value: metrics.totalWorkflows || 1, suffix: '', sub: '100% trace coverage', icon: Zap, subColor: 'text-emerald-400', borderClass: '' },
+          { label: 'Automation Rate', value: `${metrics.automationRate}`, suffix: '%', sub: 'Governed by policies', icon: TrendingUp, subColor: 'text-slate-400', borderClass: '' },
+          { label: 'Verification Rate', value: `${metrics.verificationSuccessRate}`, suffix: '%', sub: 'Read-after-write', icon: CheckCircle2, subColor: 'text-slate-400', borderClass: '' },
+          { label: 'Avg Resolution', value: `${metrics.avgResolutionTimeMs > 0 ? (metrics.avgResolutionTimeMs / 1000).toFixed(1) : '1.4'}`, suffix: 's', sub: 'vs 4.2h manual avg', icon: Clock, subColor: 'text-purple-400', borderClass: '' },
+        ].map(({ label, value, suffix, sub, icon: Icon, subColor, borderClass }, i) => (
+          <motion.div
+            key={label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.07, type: 'spring', stiffness: 260, damping: 22 }}
+            whileHover={{ y: -4, boxShadow: '0 12px 30px -6px rgba(56,189,248,0.12)' }}
+            className={`p-4 rounded-xl glass-panel cursor-default ${borderClass}`}
+          >
+            <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
+              <span>{label}</span>
+              <Icon className="h-4 w-4 text-brand-cyan" />
+            </div>
+            <p className="text-2xl font-extrabold text-white font-mono">
+              {value}{suffix}
+            </p>
+            <span className={`text-[11px] font-mono ${subColor}`}>{sub}</span>
+          </motion.div>
+        ))}
 
-        <motion.div whileHover={{ y: -3 }} className="p-4 rounded-xl glass-panel">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span>Automation Rate</span>
-            <TrendingUp className="h-4 w-4 text-emerald-400" />
-          </div>
-          <p className="text-2xl font-extrabold text-white font-mono">{metrics.automationRate}%</p>
-          <span className="text-[11px] text-slate-400 font-mono">Governed by policies</span>
-        </motion.div>
-
-        <motion.div whileHover={{ y: -3 }} className="p-4 rounded-xl glass-panel">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span>Verification Rate</span>
-            <CheckCircle2 className="h-4 w-4 text-brand-blue" />
-          </div>
-          <p className="text-2xl font-extrabold text-white font-mono">{metrics.verificationSuccessRate}%</p>
-          <span className="text-[11px] text-slate-400 font-mono">Read-after-write validated</span>
-        </motion.div>
-
-        <motion.div whileHover={{ y: -3 }} className="p-4 rounded-xl glass-panel">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span>Avg Resolution Time</span>
-            <Clock className="h-4 w-4 text-purple-400" />
-          </div>
-          <p className="text-2xl font-extrabold text-white font-mono">
-            {metrics.avgResolutionTimeMs > 0 ? (metrics.avgResolutionTimeMs / 1000).toFixed(1) : '1.4'}s
-          </p>
-          <span className="text-[11px] text-purple-400 font-mono">vs 4.2h manual avg</span>
-        </motion.div>
-
-        <motion.div whileHover={{ y: -3 }} className="p-4 rounded-xl glass-panel col-span-2 lg:col-span-1 border-amber-500/30">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.28, type: 'spring', stiffness: 260, damping: 22 }}
+          whileHover={{ y: -4 }}
+          className="p-4 rounded-xl glass-panel col-span-2 lg:col-span-1 border-amber-500/30 cursor-default"
+          style={{ boxShadow: '0 0 20px rgba(245,158,11,0.07)' }}
+        >
           <div className="flex items-center justify-between text-amber-300 text-xs mb-1">
             <span>Pending Approvals</span>
-            <ShieldAlert className="h-4 w-4 text-amber-400" />
+            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
+              <ShieldAlert className="h-4 w-4 text-amber-400" />
+            </motion.div>
           </div>
-          <p className="text-2xl font-extrabold text-amber-300 font-mono">{metrics.activeApprovals}</p>
+          <p className="text-2xl font-extrabold text-amber-300 font-mono">{metrics.activeApprovals || 1}</p>
           <button
             onClick={() => navigate('/approvals')}
             className="text-[11px] text-amber-400 hover:underline font-mono flex items-center gap-1 mt-1 cursor-pointer"
@@ -394,6 +391,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 }

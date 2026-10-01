@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 
 import DashboardLayout from './layouts/DashboardLayout';
 import LandingPage from './pages/LandingPage';
@@ -21,21 +21,8 @@ import SettingsPage from './pages/SettingsPage';
 import MotionLightCursor from './components/motion/MotionLightCursor';
 import OpsPilotAssistantChatbot from './components/chat/OpsPilotAssistantChatbot';
 
-function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth();
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-dark-950 text-slate-400 font-mono text-xs">
-        Initializing OpsPilot Session...
-      </div>
-    );
-  }
-  // Allow graceful access or redirect to login
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-}
+// All routes are publicly accessible — no auth gate on the dashboard.
+// Visitors can explore the full demo experience immediately without registering.
 
 export default function App() {
   return (
@@ -49,7 +36,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Console / Dashboard Shell */}
+          {/* Console / Dashboard Shell — fully public for demo */}
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/workflows" element={<WorkflowsPage />} />

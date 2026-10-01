@@ -8,26 +8,27 @@
   }
 }
 
-/* Custom Scrollbar for Sleek Enterprise Dashboard */
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #0B0F17;
+  background: #070A0F;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #1E293B;
   border-radius: 9999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
 
-/* Glassmorphism & Enterprise Panel Styles */
+/* ============================================================
+   GLASSMORPHISM
+   ============================================================ */
 .glass-panel {
   background: rgba(15, 21, 35, 0.7);
   backdrop-filter: blur(12px);
@@ -36,17 +37,215 @@
 }
 
 .glass-panel-hover {
-  transition: all 0.2s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 .glass-panel-hover:hover {
   border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: 0 4px 20px -2px rgba(56, 189, 248, 0.05);
+  box-shadow: 0 4px 28px -4px rgba(56, 189, 248, 0.08), 0 0 0 1px rgba(56, 189, 248, 0.05);
+  transform: translateY(-2px);
 }
 
+/* ============================================================
+   GLOW UTILITIES
+   ============================================================ */
 .glow-cyan {
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15), 0 0 60px rgba(56, 189, 248, 0.05);
+}
+.glow-amber {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.15), 0 0 60px rgba(245, 158, 11, 0.05);
+}
+.glow-emerald {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 0 60px rgba(16, 185, 129, 0.05);
 }
 
-.glow-amber {
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
+/* ============================================================
+   ANIMATED GRADIENT TEXT
+   ============================================================ */
+.gradient-text-animated {
+  background: linear-gradient(90deg, #38BDF8, #3B82F6, #6366F1, #38BDF8);
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 5s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+
+/* Cyber border / laser scan effect */
+@keyframes laser-scan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+.laser-scan::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), transparent);
+  animation: laser-scan 2.5s linear infinite;
+}
+
+/* Floating up-down */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float-y 4s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float-y 7s ease-in-out infinite;
+}
+.animate-float-delay {
+  animation: float-y 5s ease-in-out 1.5s infinite;
+}
+
+/* Rotating orbit */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+.animate-spin-reverse-slow {
+  animation: spin-slow 24s linear infinite reverse;
+}
+
+/* Sonar pulse ring */
+@keyframes sonar-ring {
+  0%   { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.sonar-ring {
+  animation: sonar-ring 2.2s ease-out infinite;
+}
+
+/* Data packet travel */
+@keyframes packet-travel {
+  0%   { left: -8%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { left: 108%; opacity: 0; }
+}
+.animate-packet {
+  animation: packet-travel 3s linear infinite;
+}
+.animate-packet-delay {
+  animation: packet-travel 3s 1.2s linear infinite;
+}
+
+/* Blink / flicker */
+@keyframes blink-caret {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.animate-blink {
+  animation: blink-caret 1s step-end infinite;
+}
+
+/* Shimmer loading skeleton */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, #0F1523 25%, #1E293B 50%, #0F1523 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+/* Neon flicker */
+@keyframes neon-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.6; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.4; }
+  99%            { opacity: 1; }
+}
+.animate-neon-flicker {
+  animation: neon-flicker 5s step-end infinite;
+}
+
+/* Scale in entrance */
+@keyframes scale-in {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.animate-scale-in {
+  animation: scale-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Slide up fade */
+@keyframes slide-up-fade {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up {
+  animation: slide-up-fade 0.45s ease both;
+}
+
+/* Page transition wrapper */
+.page-enter {
+  animation: slide-up-fade 0.4s ease both;
+}
+
+/* ============================================================
+   CYBER GRID BACKGROUND UTILITY
+   ============================================================ */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ============================================================
+   STATUS BADGE GLOW
+   ============================================================ */
+.badge-active {
+  animation: float-y 3s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+.badge-waiting {
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+.badge-completed {
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+}
+
+/* ============================================================
+   NODE CONNECTOR LINE
+   ============================================================ */
+.connector-line {
+  position: relative;
+  overflow: hidden;
+}
+.connector-line::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.7), transparent);
+  animation: laser-scan 2s linear infinite;
+}
+
+/* ============================================================
+   CARD HOVER LIFT
+   ============================================================ */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px -8px rgba(56, 189, 248, 0.12);
 }
